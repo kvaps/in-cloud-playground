@@ -1,0 +1,381 @@
+---
+apiVersion: front.in-cloud.io/v1alpha1
+kind: TableUriMapping
+metadata:
+  name: monitoring-detail
+spec:
+  id: "default-/apps.cozystack.io/v1alpha1/monitorings"
+  pathToNavigate: "/openapi-ui/{clusterName}/{namespace}/factory/monitoring-detail/~recordValue~"
+  keysToParse:
+    - metadata
+    - name
+
+---
+apiVersion: front.in-cloud.io/v1alpha1
+kind: CustomColumnsOverride
+metadata:
+  name: apps-cozystack-monitoring-detail
+spec:
+  id: "default-/apps.cozystack.io/v1alpha1/monitorings"
+  additionalPrinterColumns:
+    - jsonPath: .metadata.name
+      name: Name
+      type: string
+    - jsonPath: .metadata.namespace
+      name: Namespace
+      type: string
+    - jsonPath: .status.version
+      name: Version
+      type: string
+
+---
+apiVersion: front.in-cloud.io/v1alpha1
+kind: CustomColumnsOverride
+metadata:
+  name: monitoring-status-conditions
+spec:
+  id: "factory-monitoring-detail-status-conditions"
+  additionalPrinterColumns:
+    - jsonPath: .type
+      name: Type
+      type: string
+    - jsonPath: .status
+      name: Status
+      type: string
+    - jsonPath: .lastTransitionTime
+      name: LastTransitionTime
+      type: date
+    - jsonPath: .message
+      name: Message
+      type: string
+  additionalPrinterColumnsUndefinedValues:
+    - key: Message
+      value: "-"
+
+---
+
+apiVersion: front.in-cloud.io/v1alpha1
+kind: Factory
+metadata:
+  name: monitoring-detail
+spec:
+  key: monitoring-detail
+  withScrollableMainContentCard: true
+  urlsToFetch:
+    - "/api/clusters/{2}/k8s/apis/apps.cozystack.io/v1alpha1/namespaces/{3}/monitorings/{6}"
+  data:
+    - type: antdTabs
+      data:
+        id: 30
+        defaultActiveKey: "details"
+        items:
+          - key: "details"
+            label: "Details"
+            children:
+              - type: ContentCard
+                data:
+                  id: 2100
+                  style:
+                    marginBottom: 24px
+                children:
+                  - type: antdText
+                    data:
+                      id: 2101
+                      text: "Monitoring details"
+                      strong: true
+                      style:
+                        fontSize: 20
+                        marginBottom: 12px
+                  - type: Spacer
+                    data:
+                      id: 2101-spacer
+                      "$space": 16
+                  - type: antdRow
+                    data:
+                      id: 2102
+                      gutter: [48, 12]
+                    children:
+                      - type: antdCol
+                        data:
+                          id: 2103
+                          span: 12
+                        children:
+                          - type: antdFlex
+                            data:
+                              id: 2104
+                              vertical: true
+                              gap: 24
+                            children:
+                              - type: antdFlex
+                                data:
+                                  id: 2105
+                                  vertical: true
+                                  gap: 4
+                                children:
+                                  - type: antdText
+                                    data:
+                                      id: 21051
+                                      strong: true
+                                      text: "Name"
+                                  - type: parsedText
+                                    data:
+                                      id: 21052
+                                      text: "{reqs[0]['metadata','name']}"
+                              - type: antdFlex
+                                data:
+                                  id: 2106
+                                  vertical: true
+                                  gap: 4
+                                children:
+                                  - type: antdText
+                                    data:
+                                      id: 21061
+                                      strong: true
+                                      text: "Namespace"
+                                  - type: parsedText
+                                    data:
+                                      id: 21062
+                                      text: "{reqs[0]['metadata','namespace']}"
+                              - type: antdFlex
+                                data:
+                                  id: 2107
+                                  vertical: true
+                                  gap: 4
+                                children:
+                                  - type: antdText
+                                    data:
+                                      id: 21071
+                                      strong: true
+                                      text: "OnCall Enabled"
+                                  - type: parsedText
+                                    data:
+                                      id: 21072
+                                      text: "{reqs[0]['spec','oncall','enabled']}"
+                              - type: antdFlex
+                                data:
+                                  id: 2108
+                                  vertical: true
+                                  gap: 4
+                                children:
+                                  - type: antdText
+                                    data:
+                                      id: 21081
+                                      strong: true
+                                      text: "Version"
+                                  - type: parsedText
+                                    data:
+                                      id: 21082
+                                      text: "{reqs[0]['status','version']}"
+                      - type: antdCol
+                        data:
+                          id: 2120
+                          span: 12
+                        children:
+                          - type: antdFlex
+                            data:
+                              id: 2121
+                              vertical: true
+                              gap: 24
+                            children:
+                              - type: antdFlex
+                                data:
+                                  id: 2122
+                                  vertical: true
+                                  gap: 4
+                                children:
+                                  - type: antdText
+                                    data:
+                                      id: 21221
+                                      strong: true
+                                      text: "Grafana Host"
+                                  - type: parsedText
+                                    data:
+                                      id: 21222
+                                      text: "{reqs[0]['spec','grafana','host']}"
+                              - type: antdFlex
+                                data:
+                                  id: 2123
+                                  vertical: true
+                                  gap: 4
+                                children:
+                                  - type: antdText
+                                    data:
+                                      id: 21231
+                                      strong: true
+                                      text: "Alerta Storage"
+                                  - type: parsedText
+                                    data:
+                                      id: 21232
+                                      text: "{reqs[0]['spec','alerta','storage']}"
+                              - type: antdFlex
+                                data:
+                                  id: 2124
+                                  vertical: true
+                                  gap: 4
+                                children:
+                                  - type: antdText
+                                    data:
+                                      id: 21241
+                                      strong: true
+                                      text: "Alerta StorageClass"
+                                  - type: parsedText
+                                    data:
+                                      id: 21242
+                                      text: "{reqs[0]['spec','alerta','storageClassName']}"
+
+                              - type: antdText
+                                data:
+                                  id: 2200
+                                  text: "Metrics Storages"
+                                  strong: true
+                                  style:
+                                    fontSize: 18
+                              - type: Spacer
+                                data:
+                                  id: 2200-spacer
+                                  "$space": 8
+                              - type: antdFlex
+                                data:
+                                  id: 2201
+                                  vertical: true
+                                  gap: 12
+                                children:
+                                  - type: antdFlex
+                                    data:
+                                      id: 2202
+                                      gap: 24
+                                    children:
+                                      - type: antdText
+                                        data:
+                                          id: 2203
+                                          strong: true
+                                          text: "Name"
+                                      - type: antdText
+                                        data:
+                                          id: 2204
+                                          strong: true
+                                          text: "Dedup Interval"
+                                      - type: antdText
+                                        data:
+                                          id: 2205
+                                          strong: true
+                                          text: "Retention"
+                                      - type: antdText
+                                        data:
+                                          id: 2206
+                                          strong: true
+                                          text: "Storage"
+                                  - type: antdFlex
+                                    data:
+                                      id: 2207
+                                      gap: 24
+                                    children:
+                                      - type: parsedText
+                                        data:
+                                          id: 2208
+                                          text: "{reqs[0]['spec','metricsStorages',0,'name']}"
+                                      - type: parsedText
+                                        data:
+                                          id: 2209
+                                          text: "{reqs[0]['spec','metricsStorages',0,'deduplicationInterval']}"
+                                      - type: parsedText
+                                        data:
+                                          id: 2210
+                                          text: "{reqs[0]['spec','metricsStorages',0,'retentionPeriod']}"
+                                      - type: parsedText
+                                        data:
+                                          id: 2211
+                                          text: "{reqs[0]['spec','metricsStorages',0,'storage']}"
+                              
+                              - type: Spacer
+                                data:
+                                  id: 2211-spacer
+                                  "$space": 24
+                              
+                              - type: antdText
+                                data:
+                                  id: 2212
+                                  text: "Logs Storages"
+                                  strong: true
+                                  style:
+                                    fontSize: 18
+                              - type: Spacer
+                                data:
+                                  id: 2212-spacer
+                                  "$space": 8
+                              - type: antdFlex
+                                data:
+                                  id: 2213
+                                  vertical: true
+                                  gap: 12
+                                children:
+                                  - type: antdFlex
+                                    data:
+                                      id: 2214
+                                      gap: 24
+                                    children:
+                                      - type: antdText
+                                        data:
+                                          id: 2215
+                                          strong: true
+                                          text: "Name"
+                                      - type: antdText
+                                        data:
+                                          id: 2216
+                                          strong: true
+                                          text: "Retention"
+                                      - type: antdText
+                                        data:
+                                          id: 2217
+                                          strong: true
+                                          text: "Storage"
+                                      - type: antdText
+                                        data:
+                                          id: 2218
+                                          strong: true
+                                          text: "StorageClass"
+                                  - type: antdFlex
+                                    data:
+                                      id: 2219
+                                      gap: 24
+                                    children:
+                                      - type: parsedText
+                                        data:
+                                          id: 2220
+                                          text: "{reqs[0]['spec','logsStorages',0,'name']}"
+                                      - type: parsedText
+                                        data:
+                                          id: 2221
+                                          text: "{reqs[0]['spec','logsStorages',0,'retentionPeriod']}"
+                                      - type: parsedText
+                                        data:
+                                          id: 2222
+                                          text: "{reqs[0]['spec','logsStorages',0,'storage']}"
+                                      - type: parsedText
+                                        data:
+                                          id: 2223
+                                          text: "{reqs[0]['spec','logsStorages',0,'storageClassName']}"
+
+
+              - type: antdText
+                data:
+                  id: 2131
+                  text: "Conditions"
+                  strong: true
+                  style:
+                    fontSize: 22
+                    marginTop: 32px
+              - type: EnrichedTable
+                data:
+                  id: 2132
+                  fetchUrl: "/api/clusters/{2}/k8s/apis/apps.cozystack.io/v1alpha1/namespaces/{3}/monitorings/{6}"
+                  clusterNamePartOfUrl: "{2}"
+                  customizationId: "factory-monitoring-detail-status-conditions"
+                  baseprefix: "/openapi-ui"
+                  withoutControls: true
+                  pathToItems:
+                    - status
+                    - conditions
+          - key: "yaml"
+            label: "Yaml"
+            children: "Content of Tab Pane 2"
