@@ -11,6 +11,25 @@ spec:
     - name
 
 ---
+
+apiVersion: front.in-cloud.io/v1alpha1
+kind: CustomColumnsOverride
+metadata:
+  name: apps-cozystack-monitoring-detail
+spec:
+  id: "default-/apps.cozystack.io/v1alpha1/monitorings"
+  additionalPrinterColumns:
+    - jsonPath: .metadata.name
+      name: Name
+      type: string
+    - jsonPath: .metadata.namespace
+      name: Namespace
+      type: string
+    - jsonPath: .status.version
+      name: Version
+      type: string
+
+---
 apiVersion: front.in-cloud.io/v1alpha1
 kind: CustomColumnsOverride
 metadata:
@@ -30,7 +49,6 @@ spec:
     - jsonPath: .storage
       name: Storage
       type: string
-
 ---
 apiVersion: front.in-cloud.io/v1alpha1
 kind: CustomColumnsOverride
@@ -51,7 +69,6 @@ spec:
     - jsonPath: .storageClassName
       name: StorageClass
       type: string
-
 ---
 apiVersion: front.in-cloud.io/v1alpha1
 kind: CustomColumnsOverride
@@ -75,7 +92,6 @@ spec:
   additionalPrinterColumnsUndefinedValues:
     - key: Message
       value: "-"
-
 ---
 apiVersion: front.in-cloud.io/v1alpha1
 kind: Factory
@@ -95,8 +111,7 @@ spec:
           - key: "details"
             label: "Details"
             children:
-
-              # General Details
+              # — General details card
               - type: ContentCard
                 data:
                   id: 2100
@@ -181,7 +196,7 @@ spec:
                           id: 2120
                           span: 12
                         children:
-                          # Grafana Configuration
+                          # Grafana section
                           - type: ContentCard
                             data:
                               id: 2150
@@ -218,7 +233,7 @@ spec:
                                         data:
                                           id: 215312
                                           text: "{reqs[0]['spec','grafana','host']}"
-                          # Alerta Configuration
+                          # Alerta section
                           - type: ContentCard
                             data:
                               id: 2160
@@ -270,83 +285,84 @@ spec:
                                         data:
                                           id: 216322
                                           text: "{reqs[0]['spec','alerta','storageClassName']}"
-
-              # Spacer between sections
-              - type: Spacer
-                data:
-                  id: 2201-spacer
-                  "$space": 24
-
-              - type: antdText
-                data:
-                  id: 2200
-                  text: "Metrics Storages"
-                  strong: true
-                  style:
-                    fontSize: 22
-                    marginTop: 0  # resets margin since we added spacer
-              - type: EnrichedTable
+              # Metrics Storages section
+              - type: antdCol
                 data:
                   id: 2201
-                  baseprefix: "/openapi-ui"
-                  clusterNamePartOfUrl: "{2}"
-                  fetchUrl: "/api/clusters/{2}/k8s/apis/apps.cozystack.io/v1alpha1/namespaces/{3}/monitorings/{6}"
-                  customizationId: "factory-monitoring-detail-metrics-storages"
-                  withoutControls: true
-                  pathToItems:
-                    - spec
-                    - metricsStorages
-
-              - type: Spacer
-                data:
-                  id: 2301-spacer
-                  "$space": 24
-
-              - type: antdText
-                data:
-                  id: 2300
-                  text: "Logs Storages"
-                  strong: true
                   style:
-                    fontSize: 22
-                    marginTop: 0
-              - type: EnrichedTable
+                    marginTop: 32px
+                    padding: 16px
+                children:
+                  - type: antdText
+                    data:
+                      id: 22011
+                      text: "Metrics Storages"
+                      strong: true
+                      style:
+                        fontSize: 22
+                  - type: EnrichedTable
+                    data:
+                      id: 22012
+                      baseprefix: "/openapi-ui"
+                      clusterNamePartOfUrl: "{2}"
+                      fetchUrl: "/api/clusters/{2}/k8s/apis/apps.cozystack.io/v1alpha1/namespaces/{3}/monitorings/{6}"
+                      customizationId: "factory-monitoring-detail-metrics-storages"
+                      withoutControls: true
+                      pathToItems:
+                        - spec
+                        - metricsStorages
+              # Logs Storages section
+              - type: antdCol
                 data:
                   id: 2301
-                  baseprefix: "/openapi-ui"
-                  clusterNamePartOfUrl: "{2}"
-                  fetchUrl: "/api/clusters/{2}/k8s/apis/apps.cozystack.io/v1alpha1/namespaces/{3}/monitorings/{6}"
-                  customizationId: "factory-monitoring-detail-logs-storages"
-                  withoutControls: true
-                  pathToItems:
-                    - spec
-                    - logsStorages
-
-              - type: Spacer
-                data:
-                  id: 2401-spacer
-                  "$space": 24
-
-              - type: antdText
-                data:
-                  id: 2400
-                  text: "Conditions"
-                  strong: true
                   style:
-                    fontSize: 22
-                    marginTop: 0
-              - type: EnrichedTable
+                    marginTop: 32px
+                    padding: 16px
+                children:
+                  - type: antdText
+                    data:
+                      id: 23011
+                      text: "Logs Storages"
+                      strong: true
+                      style:
+                        fontSize: 22
+                  - type: EnrichedTable
+                    data:
+                      id: 23012
+                      baseprefix: "/openapi-ui"
+                      clusterNamePartOfUrl: "{2}"
+                      fetchUrl: "/api/clusters/{2}/k8s/apis/apps.cozystack.io/v1alpha1/namespaces/{3}/monitorings/{6}"
+                      customizationId: "factory-monitoring-detail-logs-storages"
+                      withoutControls: true
+                      pathToItems:
+                        - spec
+                        - logsStorages
+              # Conditions section
+              - type: antdCol
                 data:
                   id: 2401
-                  baseprefix: "/openapi-ui"
-                  clusterNamePartOfUrl: "{2}"
-                  fetchUrl: "/api/clusters/{2}/k8s/apis/apps.cozystack.io/v1alpha1/namespaces/{3}/monitorings/{6}"
-                  customizationId: "factory-monitoring-detail-status-conditions"
-                  withoutControls: true
-                  pathToItems:
-                    - status
-                    - conditions
-
+                  style:
+                    marginTop: 32px
+                    padding: 16px
+                children:
+                  - type: antdText
+                    data:
+                      id: 24011
+                      text: "Conditions"
+                      strong: true
+                      style:
+                        fontSize: 22
+                  - type: EnrichedTable
+                    data:
+                      id: 24012
+                      baseprefix: "/openapi-ui"
+                      clusterNamePartOfUrl: "{2}"
+                      fetchUrl: "/api/clusters/{2}/k8s/apis/apps.cozystack.io/v1alpha1/namespaces/{3}/monitorings/{6}"
+                      customizationId: "factory-monitoring-detail-status-conditions"
+                      withoutControls: true
+                      pathToItems:
+                        - status
+                        - conditions
           - key: "yaml"
             label: "Yaml"
             children: "Content of Tab Pane 2"
